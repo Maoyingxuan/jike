@@ -1,13 +1,16 @@
 import { Card, Form, Input, Button, Checkbox, message } from 'antd'
 import './index.scss'
 const Login = () => {
+  const onFinish=(values)=>{
+    console.log(values);
+  }
     return (
       <div className="login">
         <Card className="login-container">
         <div className="title">登录</div>
           {/* 登录表单 */}
-          <Form validateTrigger='onBlur'>
-      <Form.Item name="tel"
+          <Form validateTrigger='onBlur' onFinish={onFinish}>
+      <Form.Item name="mobile"
       rules={
         [
           {
@@ -22,7 +25,7 @@ const Login = () => {
       }>
         <Input size="large" placeholder="请输入手机号" />
       </Form.Item>
-      <Form.Item name="password"
+      <Form.Item name="code"
       rules={
         [{
           required:true,
