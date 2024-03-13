@@ -1,8 +1,12 @@
-import { Card, Form, Input, Button, Checkbox, message } from 'antd'
+import { Card, Form, Input, Button} from 'antd'
 import './index.scss'
+import { useDispatch } from 'react-redux'
+import { fetchLogin } from '@/store/modules/user'
 const Login = () => {
+  const dispatch = useDispatch()
   const onFinish=(values)=>{
     console.log(values);
+    dispatch(fetchLogin(values))
   }
     return (
       <div className="login">
@@ -33,11 +37,6 @@ const Login = () => {
         }]
       }>
         <Input size="large" placeholder="请输入验证码" />
-      </Form.Item>
-      <Form.Item>
-        <Checkbox className="login-checkbox-label">
-          我已阅读并同意「用户协议」和「隐私条款」
-        </Checkbox>
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit" size="large" block>
