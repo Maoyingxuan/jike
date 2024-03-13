@@ -6,10 +6,19 @@ import {
   LogoutOutlined
 } from '@ant-design/icons'
 import './index.scss'
-
+import { Outlet, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 const { Header, Sider } = Layout
-
-const GeekLayout = () => {
+const _Layout = () => {
+    const navigate = useNavigate()
+    const onClick =(e) => {
+        // console.log(e)
+        navigate(e.key)
+    }
+    // 反向高亮
+    const location = useLocation()
+    console.log(location.pathname)
+    const SelectedKey=location.pathname
   return (
     <Layout>
       <Header className="header">
@@ -27,24 +36,28 @@ const GeekLayout = () => {
           <Menu
             mode="inline"
             theme="dark"
-            defaultSelectedKeys={['1']}
+            selectedKeys={SelectedKey}
             style={{ height: '100%', borderRight: 0 }}
+            onClick={onClick}
           >
-            <Menu.Item icon={<HomeOutlined />} key="1">
+            <Menu.Item icon={<HomeOutlined />} key="/home" >
               数据概览
             </Menu.Item>
-            <Menu.Item icon={<DiffOutlined />} key="2">
+            <Menu.Item icon={<DiffOutlined />} key="/article">
               内容管理
             </Menu.Item>
-            <Menu.Item icon={<EditOutlined />} key="3">
+            <Menu.Item icon={<EditOutlined />} key="/publish">
               发布文章
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout className="layout-content" style={{ padding: 20 }}>内容</Layout>
+        <Layout className="layout-content" style={{ padding: 20 }}>
+            {/* 二级路由出口 */}
+            <Outlet></Outlet>
+        </Layout>
       </Layout>
     </Layout>
   )
 }
 
-export default GeekLayout
+export default _Layout
