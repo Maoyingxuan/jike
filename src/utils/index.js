@@ -1,4 +1,6 @@
 import { request } from "./request";
+import { setToken,removeToken,getToken } from "./token";
 export{
-    request
+    request,
+    setToken,removeToken,getToken
 }
