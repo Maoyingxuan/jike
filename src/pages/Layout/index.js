@@ -9,6 +9,23 @@ import './index.scss'
 import { Outlet, useLocation } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 const { Header, Sider } = Layout
+const items = [
+    {
+        label:'数据概览',
+        key:'/home',
+        icon:<HomeOutlined />
+    },
+    {
+        label:'内容管理',
+        key:'/article',
+        icon:<DiffOutlined />
+    },
+    {
+        label:'发布文章',
+        key:'/publish',
+        icon:<EditOutlined />
+    }
+]
 const _Layout = () => {
     const navigate = useNavigate()
     const onClick =(e) => {
@@ -39,16 +56,9 @@ const _Layout = () => {
             selectedKeys={SelectedKey}
             style={{ height: '100%', borderRight: 0 }}
             onClick={onClick}
+            items = {items}
           >
-            <Menu.Item icon={<HomeOutlined />} key="/home" >
-              数据概览
-            </Menu.Item>
-            <Menu.Item icon={<DiffOutlined />} key="/article">
-              内容管理
-            </Menu.Item>
-            <Menu.Item icon={<EditOutlined />} key="/publish">
-              发布文章
-            </Menu.Item>
+
           </Menu>
         </Sider>
         <Layout className="layout-content" style={{ padding: 20 }}>
