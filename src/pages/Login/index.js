@@ -1,4 +1,4 @@
-import { Card, Form, Input, Button, Checkbox } from 'antd'
+import { Card, Form, Input, Button, Checkbox, message } from 'antd'
 import './index.scss'
 const Login = () => {
     return (
@@ -6,11 +6,29 @@ const Login = () => {
         <Card className="login-container">
         <div className="title">登录</div>
           {/* 登录表单 */}
-          <Form>
-      <Form.Item>
+          <Form validateTrigger='onBlur'>
+      <Form.Item name="tel"
+      rules={
+        [
+          {
+          required:true,
+          message:'请输入电话号码'
+        },
+        {
+          pattern:/^1[3-9]\d{9}$/,
+          message:"手机号格式错误"
+        }
+      ]
+      }>
         <Input size="large" placeholder="请输入手机号" />
       </Form.Item>
-      <Form.Item>
+      <Form.Item name="password"
+      rules={
+        [{
+          required:true,
+          message:'请输入验证码'
+        }]
+      }>
         <Input size="large" placeholder="请输入验证码" />
       </Form.Item>
       <Form.Item>
