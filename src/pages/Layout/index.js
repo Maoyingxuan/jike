@@ -8,6 +8,9 @@ import {
 import './index.scss'
 import { Outlet, useLocation } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector,} from 'react-redux'
+import { useEffect } from 'react'
+import { fetchuserInfo,clear } from '@/store/modules/user'
 const { Header, Sider } = Layout
 const items = [
     {
@@ -32,17 +35,28 @@ const _Layout = () => {
         // console.log(e)
         navigate(e.key)
     }
+// 拿取个人用户信息
+const dispatch = useDispatch()
+useEffect(()=>{
+    dispatch(fetchuserInfo())
+},[dispatch])
+const name = useSelector(state=>state.user.userInfo.name)
+// 退出登录
+const onConfirm = () =>{
+    console.log('确认退出');
+    dispatch(clear())
+    navigate('/login')
+}
     // 反向高亮
     const location = useLocation()
-    console.log(location.pathname)
     const SelectedKey=location.pathname
   return (
     <Layout>
       <Header className="header">
         <div className="user-info">
-          <span className="user-name">user.name</span>
+            <span className="user-name">{name}</span>
           <span className="user-logout">
-            <Popconfirm title="是否确认退出？" okText="退出" cancelText="取消">
+            <Popconfirm title="是否确认退出？" okText="退出" cancelText="取消" onConfirm={onConfirm}>
               <LogoutOutlined /> 退出
             </Popconfirm>
           </span>
