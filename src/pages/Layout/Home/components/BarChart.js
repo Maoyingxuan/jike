@@ -1,13 +1,13 @@
 import * as echarts from 'echarts'
 import { useEffect, useRef } from 'react';
-const BarChart =(title) =>{
+const BarChart =() =>{
     const chartRef = useRef(null)
     useEffect(()=>{
         const chartDom = chartRef.current;
         const myChart = echarts.init(chartDom);
     const option = {
         title:{
-            text:title
+            text:"Title"
         },
     xAxis: {
     type: 'category',
@@ -24,7 +24,7 @@ const BarChart =(title) =>{
   ]
 };
 option && myChart.setOption(option);
-    })
+    },[])
     return(
         <div ref={chartRef} style={{width:'500px',height:'400px'}}></div>
     )   

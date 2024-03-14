@@ -5,3 +5,10 @@ export function channelAPI(){
         method:'GET',
     })
 }
+export function AddArticleAPI(data){
+    return request({
+        url:'/mp/articles?draft=false',
+        method:'POST',
+        data:data
+    })
+}
