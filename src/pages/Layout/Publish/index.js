@@ -37,12 +37,23 @@ const { Option } = Select
             title:title,
             content:content,
             cover:{
-                type:0,
-                images:[]
+                type:Type,
+                images:imageList.map(item=> item.response.data.url)
             },
             channel_id:channel_id
         }
         AddArticleAPI(reqdata)
+    }
+    const [Type,setType]=useState(0)
+    const onTypeChange=(e) =>{
+        console.log("切换类型",e.target)
+        setType(e.target.value)
+    }
+    const [imageList,setimageList]=useState([])
+    const onChange =(value) =>{
+        console.log("loading")
+        setimageList(value.fileList)
+        console.log(imageList)
     }
     return (
       <div className="publish">
@@ -63,7 +74,7 @@ const { Option } = Select
           <Form
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 16 }}
-            initialValues={{ type: 1 }}
+            initialValues={{ type: 0 }}
             onFinish={onFinish}
           >
             <Form.Item
@@ -85,22 +96,25 @@ const { Option } = Select
   
             <Form.Item label="封面">
               <Form.Item name="type">
-                <Radio.Group>
+                <Radio.Group onChange={onTypeChange}>
                   <Radio value={1}>单图</Radio>
                   <Radio value={3}>三图</Radio>
                   <Radio value={0}>无图</Radio>
                 </Radio.Group>
               </Form.Item>
-              <Upload
+              {Type>0 && <Upload
                 name="image"
                 listType="picture-card"
                 className="avatar-uploader"
+                action="http://geek.itheima.net/v1_0/upload"
+                onChange={onChange}
                 showUploadList
+                maxCount={Type}
               >
                 <div style={{ marginTop: 8 }}>
                   <PlusOutlined />
                 </div>
-              </Upload>
+              </Upload>}
             </Form.Item>
             <Form.Item
               label="内容"
