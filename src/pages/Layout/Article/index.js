@@ -10,9 +10,11 @@ import { useChannel } from '@/hooks/useChannel'
 import { useEffect, useState } from 'react'
 import { getArticleListAPI } from '@/apis/article'
 import { delArticleAPI } from '@/apis/article'
+import { useNavigate } from 'react-router-dom'
 const { Option } = Select
 const { RangePicker } = DatePicker
 const Article = () => {
+  const navigate=useNavigate()
   const [articleList,setArticleList] = useState([])
   const [count,setCount] = useState(0)
     // 准备参数
@@ -101,7 +103,7 @@ const Article = () => {
           render: data => {
             return (
               <Space size="middle">
-                <Button type="primary" shape="circle" icon={<EditOutlined />} />
+                <Button type="primary" shape="circle" icon={<EditOutlined />} onClick={()=>navigate(`/publish?id=${data.id}`)} />
                 <Popconfirm
               title="确认删除该条文章吗?"
               onConfirm={() => DelArticle(data)}
