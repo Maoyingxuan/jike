@@ -13,22 +13,14 @@ import {
   } from 'antd'
   import { PlusOutlined } from '@ant-design/icons'
   import './index.scss'
-import { useEffect, useState } from "react";
-import { channelAPI , AddArticleAPI} from "@/apis/publish"; 
+import { useState } from "react";
+import { AddArticleAPI} from "@/apis/publish"; 
+import { useChannel } from "@/hooks/useChannel";
+
 const { Option } = Select
   
   const Publish = () => {
-    //   获取频道列表
-    const [channelList,setChannelList]=useState([])
-    useEffect(()=>{
-        const getChannelList = async() =>{
-            const res = await channelAPI()
-            setChannelList(res.data.data.channels)
-            console.log(res)
-        }
-        getChannelList()
-        // console.log(channelList)
-    },[])
+    const{channelList} = useChannel()
     // 提交表单
     const onFinish=(formValue)=>{
         console.log(formValue)
@@ -46,14 +38,14 @@ const { Option } = Select
     }
     const [Type,setType]=useState(0)
     const onTypeChange=(e) =>{
-        console.log("切换类型",e.target)
+        // console.log("切换类型",e.target)
         setType(e.target.value)
     }
     const [imageList,setimageList]=useState([])
     const onChange =(value) =>{
         console.log("loading")
         setimageList(value.fileList)
-        console.log(imageList)
+        // console.log(imageList)
     }
     return (
       <div className="publish">
