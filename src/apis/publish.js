@@ -12,3 +12,16 @@ export function AddArticleAPI(data){
         data:data
     })
 }
+export function getArticleDetailAPI(data){
+    return request({
+        url:`/mp/articles/${data}`,
+        method:'GET',
+    })
+}
+export function updateArticleAPI(data){
+    return request({
+        url:`/mp/articles/${data.id}?draft=false`,
+        method:'PUT',
+        data:data
+    })
+}

@@ -13,14 +13,16 @@ import {
   } from 'antd'
   import { PlusOutlined } from '@ant-design/icons'
   import './index.scss'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddArticleAPI} from "@/apis/publish"; 
 import { useChannel } from "@/hooks/useChannel";
-
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { getArticleDetailAPI,updateArticleAPI } from "@/apis/publish";
 const { Option } = Select
   
   const Publish = () => {
     const{channelList} = useChannel()
+    const navigate = useNavigate()
     // 提交表单
     const onFinish=(formValue)=>{
         console.log(formValue)
@@ -30,11 +32,21 @@ const { Option } = Select
             content:content,
             cover:{
                 type:Type,
-                images:imageList.map(item=> item.response.data.url)
+                // 新增逻辑
+                // images:imageList.map(item=> item.response.data.url)
+                // 完整逻辑
+                images:imageList.map(item=>{
+                  if(item.response) return item.response.data.url
+                  else return item.url
+                  })
             },
             channel_id:channel_id
         }
+        if(articleId)
+        updateArticleAPI(reqdata)
+        else
         AddArticleAPI(reqdata)
+        navigate('/article')
     }
     const [Type,setType]=useState(0)
     const onTypeChange=(e) =>{
@@ -47,6 +59,27 @@ const { Option } = Select
         setimageList(value.fileList)
         // console.log(imageList)
     }
+    // 编辑功能回填数据
+        // 获取id
+          const [searchParams] = useSearchParams()
+          const articleId = searchParams.get('id')
+          const [form] = Form.useForm()
+    useEffect(()=>{
+        // 通过id获取
+        const getArticleDetail = async() =>{
+          const res = await getArticleDetailAPI(articleId)         
+          form.setFieldsValue({
+            ...res.data.data,
+            type:res.data.data.cover.type
+          })
+          setType(res.data.data.cover.type)
+          setimageList(res.data.data.cover.images.map(url=>{
+            return {url}
+          }))
+          // console.log(res.data.data)
+        }
+        if(articleId)getArticleDetail()
+    },[articleId,form])
     return (
       <div className="publish">
         <Card
@@ -57,7 +90,7 @@ const { Option } = Select
             title: <a href="/home">首页</a>,
             },
             {
-            title: '发布文章',
+            title:  `${articleId?'编辑':'新增'}文章`
             },
     ]}>
             </Breadcrumb>
@@ -68,6 +101,7 @@ const { Option } = Select
             wrapperCol={{ span: 16 }}
             initialValues={{ type: 0 }}
             onFinish={onFinish}
+            form = {form}
           >
             <Form.Item
               label="标题"
@@ -102,6 +136,7 @@ const { Option } = Select
                 onChange={onChange}
                 showUploadList
                 maxCount={Type}
+                fileList = {imageList}
               >
                 <div style={{ marginTop: 8 }}>
                   <PlusOutlined />
@@ -123,7 +158,7 @@ const { Option } = Select
             <Form.Item wrapperCol={{ offset: 4 }}>
               <Space>
                 <Button size="large" type="primary" htmlType="submit">
-                  发布文章
+                  {articleId?'更新文章':'发布文章'}
                 </Button>
               </Space>
             </Form.Item>
